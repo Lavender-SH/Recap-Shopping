@@ -6,44 +6,84 @@
 //
 
 import UIKit
+import SnapKit
 
 class MainViewController: BaseViewController {
-
     
+    let mainView = MainView()
 
-
-    var searchController: UISearchController!
-    
-    
+    override func loadView() {
+        self.view = mainView
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         makeNavigationUI()
-
-        
-        
-        
+        mainView.searchBar.delegate = self
     }
+    
     func makeNavigationUI() {
-        view.backgroundColor = .black
-
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = .black
         appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.shadowColor = .clear
 
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.isTranslucent = false
         navigationItem.title = "쇼핑 검색"
-        navigationItem.hidesSearchBarWhenScrolling = false
-        navigationItem.searchController = searchController
     }
-
-
+    
+    @objc func cancelButtonTapped() {
+        
+        navigationController?.popViewController(animated: true)
+    }
     
 
+    override func configureView() {
+        super.configureView()
+    
+        [mainView.accuracyButton, mainView.dateButton, mainView.upPriceButton, mainView.downPriceButton].forEach {
+            $0.addTarget(self, action: #selector(toggleButtonColor), for: .touchUpInside)
+        }
+    }
+    
+    @objc func toggleButtonColor(sender: UIButton) {
+        sender.isSelected.toggle()
+        if sender.isSelected {
+            sender.backgroundColor = .white
+            sender.setTitleColor(.black, for: .normal)
+        } else {
+            sender.backgroundColor = .black
+            sender.setTitleColor(.gray, for: .normal)
+        }
+    }
+
+    
+    
+    override func setConstraints() {
+
+        
+    }
+    
+
+    
+    
 }
+
+extension MainViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        print("검색함: \(searchBar.text ?? "")")
+    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
+    }
+}
+
+
 
 
