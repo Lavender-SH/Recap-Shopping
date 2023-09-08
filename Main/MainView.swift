@@ -10,7 +10,7 @@ import SnapKit
 
 class MainView: BaseView {
     
-    lazy var searchBar: UISearchBar = {
+    lazy var searchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = ""
         searchBar.layer.shadowColor = UIColor.clear.cgColor
@@ -78,7 +78,6 @@ class MainView: BaseView {
         view.collectionViewLayout = collectionViewLayout()
         return view
     }()
-
     
 
     

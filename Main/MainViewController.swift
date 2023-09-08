@@ -16,11 +16,6 @@ class MainViewController: BaseViewController {
         self.view = mainView
     }
     
-    
-    
-    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -52,12 +47,12 @@ class MainViewController: BaseViewController {
 
     override func configureView() {
         super.configureView()
-    
+        
         [mainView.accuracyButton, mainView.dateButton, mainView.upPriceButton, mainView.downPriceButton].forEach {
             $0.addTarget(self, action: #selector(toggleButtonColor), for: .touchUpInside)
         }
     }
-    
+        
     @objc func toggleButtonColor(sender: UIButton) {
         sender.isSelected.toggle()
         if sender.isSelected {
@@ -68,16 +63,11 @@ class MainViewController: BaseViewController {
             sender.setTitleColor(.gray, for: .normal)
         }
     }
-
     
     
     override func setConstraints() {
 
-        
     }
-    
-
-    
     
 }
 
@@ -101,11 +91,9 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MainCollectionViewCell", for: indexPath) as? MainCollectionViewCell else { return UICollectionViewCell() }
         cell.backgroundColor = .clear
+        cell.toggleLike()
         return cell
     }
     
-    
-    
-    
-    
 }
+

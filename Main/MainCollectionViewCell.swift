@@ -11,8 +11,6 @@ import SnapKit
 class MainCollectionViewCell: BaseCollectionViewCell {
     
     
-    
-    
     let imageView = {
         let view = UIImageView()
         view.backgroundColor = .lightGray
@@ -20,7 +18,6 @@ class MainCollectionViewCell: BaseCollectionViewCell {
         view.layer.cornerRadius = 15
         return view
     }()
-    
     let titleLabel = {
         let view = UILabel()
         view.textColor = .gray
@@ -49,17 +46,23 @@ class MainCollectionViewCell: BaseCollectionViewCell {
         view.text = "19,000,0000"
         return view
     }()
-    
-
-    
-    
-    
+    let likeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "suit.heart"), for: .normal)
+        button.backgroundColor = .white
+        button.tintColor = .black
+        button.addTarget(self, action: #selector(toggleLike), for: .touchUpInside)
+        button.layer.cornerRadius = 18
+        button.clipsToBounds = true
+        return button
+    }()
     
     override func configureView() {
         contentView.addSubview(imageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(detailLabel)
         contentView.addSubview(priceLabel)
+        contentView.addSubview(likeButton)
     }
     
     override func setConstraints() {
@@ -86,8 +89,28 @@ class MainCollectionViewCell: BaseCollectionViewCell {
             make.width.equalToSuperview()
             make.height.equalTo(20)
         }
+        likeButton.snp.makeConstraints { make in
+            make.bottom.equalTo(imageView.snp.bottom).inset(8)
+            make.trailing.equalTo(imageView.snp.trailing).offset(-8)
+            make.size.equalTo(36)
+        }
         
-        
+    }
+    
+    // MARK: - likeButton을 눌렀을때 하트의 이미직이 바뀌는 로직
+    var isLiked: Bool = false {
+        didSet {
+            updateLikeButtonImage()
+        }
+    }
+
+    @objc func toggleLike() {
+        isLiked.toggle()
+    }
+
+    private func updateLikeButtonImage() {
+        let imageName = isLiked ? "suit.heart.fill" : "suit.heart"
+        likeButton.setImage(UIImage(systemName: imageName), for: .normal)
     }
     
     
