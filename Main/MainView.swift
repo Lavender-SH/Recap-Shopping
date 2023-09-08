@@ -72,10 +72,18 @@ class MainView: BaseView {
     }()
     
     
+    lazy var collectionView = {
+        let view = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout())
+        view.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: "MainCollectionViewCell")
+        view.collectionViewLayout = collectionViewLayout()
+        return view
+    }()
+
     
+
     
     override func configureView() {
-        [searchBar, accuracyButton, dateButton, upPriceButton, downPriceButton].forEach {
+        [searchBar, accuracyButton, dateButton, upPriceButton, downPriceButton, collectionView].forEach {
             addSubview($0)
         }
 
@@ -104,13 +112,29 @@ class MainView: BaseView {
             make.width.equalTo(80)
             make.height.equalTo(38)
         }
-        
         downPriceButton.snp.makeConstraints { make in
             make.top.equalTo(searchBar.snp.bottom).offset(20)
             make.leading.equalTo(upPriceButton.snp.trailing).offset(7)
             make.width.equalTo(80)
             make.height.equalTo(38)
         }
+        collectionView.snp.makeConstraints { make in
+            make.leading.equalTo(10)
+            make.trailing.equalTo(-10)
+            make.horizontalEdges.bottom.equalToSuperview()
+            make.top.equalTo(accuracyButton.snp.bottom).offset(20)
+        }
+    }
+    
+    
+    private func collectionViewLayout() -> UICollectionViewFlowLayout {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 20
+        layout.minimumInteritemSpacing = 5
+        let size = UIScreen.main.bounds.width - 20
+        layout.itemSize = CGSize(width: size / 2, height: 250)
+        layer.cornerRadius = 20
+        return layout
     }
     
     

@@ -16,11 +16,18 @@ class MainViewController: BaseViewController {
         self.view = mainView
     }
     
+    
+    
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         makeNavigationUI()
         mainView.searchBar.delegate = self
+        mainView.collectionView.delegate = self
+        mainView.collectionView.dataSource = self
     }
     
     func makeNavigationUI() {
@@ -86,4 +93,19 @@ extension MainViewController: UISearchBarDelegate {
 
 
 
-
+extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 8
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MainCollectionViewCell", for: indexPath) as? MainCollectionViewCell else { return UICollectionViewCell() }
+        cell.backgroundColor = .clear
+        return cell
+    }
+    
+    
+    
+    
+    
+}
