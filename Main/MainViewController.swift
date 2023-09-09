@@ -25,15 +25,19 @@ class MainViewController: BaseViewController {
         mainView.searchBar.delegate = self
         mainView.collectionView.delegate = self
         mainView.collectionView.dataSource = self
-        loadData(query: "캠핑카", sort: "sim")
+        mainView.collectionView.backgroundColor = .black
+
         
+        loadData(query: "자전거")
+    
     }
-    func loadData(query: String, sort: String) {
-        shopManager.ShoppingCallRequest(query: query, sort: sort) { items in
+    func loadData(query: String) {
+        shopManager.ShoppingCallRequest(query: query) { items in
             guard let items = items else { return }
             self.shopItems.append(contentsOf: items)
             self.mainView.collectionView.reloadData()
             print(#function)
+            print(items)
         }
     }
     
@@ -64,11 +68,9 @@ class MainViewController: BaseViewController {
     }
     
     @objc func cancelButtonTapped() {
-        // Handle the cancel button action here
         navigationController?.popViewController(animated: true)
     }
 
-        
     @objc func toggleButtonColor(sender: UIButton) {
         sender.isSelected.toggle()
         if sender.isSelected {
@@ -80,19 +82,17 @@ class MainViewController: BaseViewController {
         }
     }
     
-    
     override func setConstraints() {
 
     }
-    
-    
-    
+     
 }
-
 extension MainViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
-        print("검색함: \(searchBar.text ?? "")")
+        let text = mainView.searchBar.text!
+        loadData(query: text)
+        
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         
@@ -108,6 +108,8 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MainCollectionViewCell", for: indexPath) as? MainCollectionViewCell else { return UICollectionViewCell() }
+        let item = shopItems[indexPath.row]
+        cell.configure(with: item)
         cell.backgroundColor = .clear
         cell.toggleLike()
         return cell

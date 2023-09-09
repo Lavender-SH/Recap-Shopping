@@ -15,6 +15,7 @@ class MainView: BaseView {
         searchBar.placeholder = ""
         searchBar.layer.shadowColor = UIColor.clear.cgColor
         searchBar.showsCancelButton = true
+        searchBar.barTintColor = .black
         if let cancelButton = searchBar.value(forKey: "cancelButton") as? UIButton {
             cancelButton.setTitle("취소", for: .normal)
             cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
@@ -117,9 +118,8 @@ class MainView: BaseView {
             make.height.equalTo(38)
         }
         collectionView.snp.makeConstraints { make in
-            make.leading.equalTo(10)
-            make.trailing.equalTo(-10)
-            make.horizontalEdges.bottom.equalToSuperview()
+            make.horizontalEdges.equalToSuperview()
+            make.bottom.equalToSuperview()
             make.top.equalTo(accuracyButton.snp.bottom).offset(20)
         }
     }

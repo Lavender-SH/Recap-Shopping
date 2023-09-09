@@ -16,7 +16,9 @@ struct Shop: Codable {
 struct Item: Codable {
     let title: String
     let image: String
-    let lprice, hprice, mallName: String
+    let lprice: String
+    let hprice: String
+    let mallName: String
 
 
     enum CodingKeys: String, CodingKey {

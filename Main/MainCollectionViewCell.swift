@@ -7,43 +7,41 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 class MainCollectionViewCell: BaseCollectionViewCell {
     
     
     let imageView = {
         let view = UIImageView()
-        view.backgroundColor = .lightGray
-        view.contentMode = .scaleAspectFill
+        view.contentMode = .scaleToFill
         view.layer.cornerRadius = 15
+        view.clipsToBounds = true
         return view
     }()
-    let titleLabel = {
+    let mallNameLabel = {
         let view = UILabel()
         view.textColor = .gray
         view.font = UIFont.systemFont(ofSize: 15)
         view.textAlignment = .left
-        view.text = "월드캠핑카"
         return view
     }()
-    let detailLabel = {
+    let titleLabel = {
         let view = UILabel()
         view.textColor = .white
         view.font = UIFont.systemFont(ofSize: 16)
         view.textAlignment = .left
         view.numberOfLines = 2
-        view.text = "[대한캠핑카] 쌍용 렉스턴스포츠칸 캠핑카 미니어쩌구"
         view.setContentHuggingPriority(.defaultHigh, for: .vertical)
         return view
     }()
-
+    
     let priceLabel = {
         let view = UILabel()
         view.textColor = .white
         view.font = UIFont.systemFont(ofSize: 18)
         view.font = UIFont.boldSystemFont(ofSize: 18)
         view.textAlignment = .left
-        view.text = "19,000,0000"
         return view
     }()
     let likeButton: UIButton = {
@@ -59,8 +57,8 @@ class MainCollectionViewCell: BaseCollectionViewCell {
     
     override func configureView() {
         contentView.addSubview(imageView)
+        contentView.addSubview(mallNameLabel)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(detailLabel)
         contentView.addSubview(priceLabel)
         contentView.addSubview(likeButton)
     }
@@ -71,20 +69,20 @@ class MainCollectionViewCell: BaseCollectionViewCell {
             make.top.equalTo(contentView)
             make.height.equalTo(170)
         }
-        titleLabel.snp.makeConstraints { make in
+        mallNameLabel.snp.makeConstraints { make in
             make.top.equalTo(imageView.snp.bottom).offset(3)
             make.leading.equalTo(7)
             make.width.equalToSuperview()
             make.height.equalTo(20)
         }
-        detailLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(3)
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(mallNameLabel.snp.bottom).offset(3)
             make.leading.equalTo(7)
             make.width.equalToSuperview()
             
         }
         priceLabel.snp.makeConstraints { make in
-            make.top.equalTo(detailLabel.snp.bottom).offset(3)
+            make.top.equalTo(titleLabel.snp.bottom).offset(3)
             make.leading.equalTo(7)
             make.width.equalToSuperview()
             make.height.equalTo(20)
@@ -103,14 +101,37 @@ class MainCollectionViewCell: BaseCollectionViewCell {
             updateLikeButtonImage()
         }
     }
-
+    
     @objc func toggleLike() {
         isLiked.toggle()
     }
-
+    
     private func updateLikeButtonImage() {
         let imageName = isLiked ? "suit.heart.fill" : "suit.heart"
         likeButton.setImage(UIImage(systemName: imageName), for: .normal)
+    }
+    
+    
+    //셀에 데이터를 넣는 함수
+    func configure(with item: Item) {
+        mallNameLabel.text = item.mallName
+        // <b> 태그 제거
+        let cleanTitle = item.title.replacingOccurrences(of: "<b>", with: "").replacingOccurrences(of: "</b>", with: "")
+        titleLabel.text = cleanTitle
+        
+        // 가격을 콤마로 구분하여 표시
+        if let price = Int(item.lprice) {
+            let numberFormatter = NumberFormatter()
+            numberFormatter.numberStyle = .decimal
+            let formattedPrice = numberFormatter.string(from: NSNumber(value: price))
+            priceLabel.text = formattedPrice
+        } else {
+            priceLabel.text = item.lprice
+        }
+        
+        if let imageURL = URL(string: item.image) {
+            imageView.kf.setImage(with: imageURL)
+        }
     }
     
     
