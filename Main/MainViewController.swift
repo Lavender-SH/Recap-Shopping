@@ -11,6 +11,8 @@ import SnapKit
 class MainViewController: BaseViewController {
     
     let mainView = MainView()
+    var shopManager = NetworkManager.shared
+    var shopItems: [Item] = []
 
     override func loadView() {
         self.view = mainView
@@ -23,6 +25,16 @@ class MainViewController: BaseViewController {
         mainView.searchBar.delegate = self
         mainView.collectionView.delegate = self
         mainView.collectionView.dataSource = self
+        loadData(query: "캠핑카", sort: "sim")
+        
+    }
+    func loadData(query: String, sort: String) {
+        shopManager.ShoppingCallRequest(query: query, sort: sort) { items in
+            guard let items = items else { return }
+            self.shopItems.append(contentsOf: items)
+            self.mainView.collectionView.reloadData()
+            print(#function)
+        }
     }
     
     func makeNavigationUI() {
@@ -39,11 +51,6 @@ class MainViewController: BaseViewController {
         navigationItem.title = "쇼핑 검색"
     }
     
-    @objc func cancelButtonTapped() {
-        
-        navigationController?.popViewController(animated: true)
-    }
-    
 
     override func configureView() {
         super.configureView()
@@ -51,7 +58,16 @@ class MainViewController: BaseViewController {
         [mainView.accuracyButton, mainView.dateButton, mainView.upPriceButton, mainView.downPriceButton].forEach {
             $0.addTarget(self, action: #selector(toggleButtonColor), for: .touchUpInside)
         }
+        if let cancelButton = mainView.searchBar.value(forKey: "cancelButton") as? UIButton {
+            cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: UIControl.Event.touchUpInside)
+            }
     }
+    
+    @objc func cancelButtonTapped() {
+        // Handle the cancel button action here
+        navigationController?.popViewController(animated: true)
+    }
+
         
     @objc func toggleButtonColor(sender: UIButton) {
         sender.isSelected.toggle()
@@ -69,6 +85,8 @@ class MainViewController: BaseViewController {
 
     }
     
+    
+    
 }
 
 extension MainViewController: UISearchBarDelegate {
@@ -85,7 +103,7 @@ extension MainViewController: UISearchBarDelegate {
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 8
+        return shopItems.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -96,4 +114,5 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
 }
+
 

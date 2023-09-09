@@ -78,7 +78,6 @@ class MainView: BaseView {
         view.collectionViewLayout = collectionViewLayout()
         return view
     }()
-    
 
     
     override func configureView() {
@@ -135,6 +134,8 @@ class MainView: BaseView {
         layer.cornerRadius = 20
         return layout
     }
+                                   
+    
     
     
     

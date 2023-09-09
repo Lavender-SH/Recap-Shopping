@@ -97,7 +97,7 @@ class MainCollectionViewCell: BaseCollectionViewCell {
         
     }
     
-    // MARK: - likeButton을 눌렀을때 하트의 이미직이 바뀌는 로직
+    // MARK: - likeButton을 눌렀을때 하트의 이미지가 바뀌는 로직
     var isLiked: Bool = false {
         didSet {
             updateLikeButtonImage()
