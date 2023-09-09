@@ -36,7 +36,7 @@ class NetworkManager {
         AF.request(baseURL, method: .get, parameters: parameters, headers: headers).validate(statusCode: 200...500).responseDecodable(of: Shop.self) { response in
             //print("===555===", response.value)
             if let statusCode = response.response?.statusCode {
-               // print("===1111===Status Code: \(statusCode)")
+            // print("===1111===Status Code: \(statusCode)")
             }
             
             switch response.result {
