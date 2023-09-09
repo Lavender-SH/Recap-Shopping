@@ -177,8 +177,23 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             }
         }
     }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item = shopItems[indexPath.row]
+        let webVC = WebViewController()
+        webVC.productID = item.productID
+        
+        let cleanTitle = item.title.replacingOccurrences(of: "<b>", with: "").replacingOccurrences(of: "</b>", with: "")
+        webVC.webViewTitle = cleanTitle
+        
+        
+        
+        navigationController?.pushViewController(webVC, animated: true)
+        
+    }
 
 }
+
+
 
 
 

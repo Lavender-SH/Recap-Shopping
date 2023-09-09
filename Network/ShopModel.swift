@@ -19,10 +19,12 @@ struct Item: Codable {
     let lprice: String
     let hprice: String
     let mallName: String
+    let productID: String?
 
 
     enum CodingKeys: String, CodingKey {
         case title, image, lprice, hprice, mallName
+        case productID = "productId"
     }
 }
 

@@ -29,6 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let vc1 = UINavigationController(rootViewController: MainViewController())
         let vc2 = LikeViewController()
         
+        
         vc1.title = "검색"
         vc2.title = "좋아요"
         
