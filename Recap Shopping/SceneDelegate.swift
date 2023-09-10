@@ -27,7 +27,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         //탭바
         let tabBarVC = UITabBarController()
         let vc1 = UINavigationController(rootViewController: MainViewController())
-        let vc2 = LikeViewController()
+        let vc2 = UINavigationController(rootViewController: LikeViewController())
         
         
         vc1.title = "검색"

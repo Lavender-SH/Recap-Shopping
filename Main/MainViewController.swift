@@ -74,6 +74,8 @@ class MainViewController: BaseViewController {
     }
     
     @objc func cancelButtonTapped() {
+        shopItems.removeAll()
+        mainView.collectionView.reloadData()
         navigationController?.popViewController(animated: true)
     }
         
@@ -136,11 +138,10 @@ extension MainViewController: UISearchBarDelegate {
         
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        
+        shopItems.removeAll()
+        mainView.collectionView.reloadData()
     }
 }
-
-
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDataSourcePrefetching {
     
