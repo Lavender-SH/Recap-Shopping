@@ -7,18 +7,20 @@
 
 import UIKit
 import SnapKit
+import RealmSwift
 
 class LikeViewController: BaseViewController {
     
     let likeView = LikeView()
     var shopManager = NetworkManager.shared
+    //⭐️⭐️⭐️ Realm 데이터베이스 필수 변수
+    var likedItems: Results<LikeTable>!
+    let realm = try! Realm()
+    let repository = LikeTableRepository()
     
     override func loadView() {
         self.view = likeView
     }
-    
-
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +30,8 @@ class LikeViewController: BaseViewController {
         likeView.collectionView.delegate = self
         likeView.collectionView.dataSource = self
         likeView.collectionView.backgroundColor = .black
+        //⭐️⭐️⭐️ 좋아요 데이터 불러오기
+        likedItems = repository.fetch()
     }
     
     func likeMakeNavigationUI() {
@@ -61,14 +65,19 @@ class LikeViewController: BaseViewController {
 
 extension LikeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return likedItems.count //⭐️⭐️⭐️
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LikeCollectionViewCellIdentifier", for: indexPath) as? LikeCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        //⭐️⭐️⭐️
+        let item = likedItems[indexPath.row]
+        cell.configure(with: item)
+    
+        return cell
     }
-    
-    
 }
 
 

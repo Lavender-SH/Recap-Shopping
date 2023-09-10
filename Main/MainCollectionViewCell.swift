@@ -55,6 +55,8 @@ class MainCollectionViewCell: BaseCollectionViewCell {
         return button
     }()
     
+    var onLikeButtonTapped: ((Bool) -> Void)?
+    
     override func configureView() {
         contentView.addSubview(imageView)
         contentView.addSubview(mallNameLabel)
@@ -104,6 +106,7 @@ class MainCollectionViewCell: BaseCollectionViewCell {
     
     @objc func toggleLike() {
         isLiked.toggle()
+        onLikeButtonTapped?(isLiked)
     }
     
     private func updateLikeButtonImage() {

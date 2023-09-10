@@ -20,6 +20,7 @@ struct Item: Codable {
     let hprice: String
     let mallName: String
     let productID: String?
+    
 
 
     enum CodingKeys: String, CodingKey {

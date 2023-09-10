@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import RealmSwift
 
 class MainViewController: BaseViewController {
     
@@ -15,6 +16,10 @@ class MainViewController: BaseViewController {
     var shopItems: [Item] = []
     var isEnd = false
     var start = 1
+    //⭐️⭐️⭐️
+    var tasks: Results<LikeTable>!
+    let realm = try! Realm()
+    let repository = LikeTableRepository()
     
     override func loadView() {
         self.view = mainView
@@ -30,6 +35,7 @@ class MainViewController: BaseViewController {
         mainView.collectionView.backgroundColor = .black
         mainView.collectionView.prefetchDataSource = self
         //loadData(query: "자전거")
+        
         
     }
     func loadData(query: String) {
@@ -157,7 +163,14 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         let item = shopItems[indexPath.row]
         cell.configure(with: item)
         cell.backgroundColor = .clear
+        //⭐️⭐️⭐️
         cell.toggleLike()
+        cell.onLikeButtonTapped = { [weak self] isLiked in
+            if isLiked {
+                self?.repository.saveItem(item)
+            }
+        }
+        
         return cell
     }
     
@@ -185,8 +198,6 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         
         let cleanTitle = item.title.replacingOccurrences(of: "<b>", with: "").replacingOccurrences(of: "</b>", with: "")
         webVC.webViewTitle = cleanTitle
-        
-        
         
         navigationController?.pushViewController(webVC, animated: true)
         

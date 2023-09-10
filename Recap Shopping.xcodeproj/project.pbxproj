@@ -13,6 +13,7 @@
 		020F53862AAD84DE00665871 /* RealmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020F53852AAD84DE00665871 /* RealmModel.swift */; };
 		020F53892AAD85B400665871 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 020F53882AAD85B400665871 /* Realm */; };
 		020F538B2AAD85B400665871 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 020F538A2AAD85B400665871 /* RealmSwift */; };
+		020F538D2AAD997600665871 /* LikeTableRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020F538C2AAD997600665871 /* LikeTableRepository.swift */; };
 		022C838E2AABFA9000A8651A /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 022C838D2AABFA9000A8651A /* NetworkManager.swift */; };
 		022C83902AABFAA100A8651A /* API Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 022C838F2AABFAA000A8651A /* API Key.swift */; };
 		022C83922AABFAB600A8651A /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 022C83912AABFAB600A8651A /* .gitignore */; };
@@ -40,6 +41,7 @@
 		020F53812AACE3BE00665871 /* LikeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeCollectionViewCell.swift; sourceTree = "<group>"; };
 		020F53832AACE69F00665871 /* LikeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeView.swift; sourceTree = "<group>"; };
 		020F53852AAD84DE00665871 /* RealmModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmModel.swift; sourceTree = "<group>"; };
+		020F538C2AAD997600665871 /* LikeTableRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeTableRepository.swift; sourceTree = "<group>"; };
 		022C838D2AABFA9000A8651A /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		022C838F2AABFAA000A8651A /* API Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "API Key.swift"; sourceTree = "<group>"; };
 		022C83912AABFAB600A8651A /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				020F53852AAD84DE00665871 /* RealmModel.swift */,
+				020F538C2AAD997600665871 /* LikeTableRepository.swift */,
 			);
 			path = Realm;
 			sourceTree = "<group>";
@@ -262,6 +265,7 @@
 				02E59CFC2AA9A4C200D4D2A7 /* BaseCollectionViewCell.swift in Sources */,
 				022C838E2AABFA9000A8651A /* NetworkManager.swift in Sources */,
 				02E59CFA2AA9A47D00D4D2A7 /* BseView.swift in Sources */,
+				020F538D2AAD997600665871 /* LikeTableRepository.swift in Sources */,
 				020F53822AACE3BE00665871 /* LikeCollectionViewCell.swift in Sources */,
 				022C83962AAC11A700A8651A /* ShopModel.swift in Sources */,
 				020F53842AACE69F00665871 /* LikeView.swift in Sources */,

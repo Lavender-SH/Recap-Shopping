@@ -111,23 +111,12 @@ class LikeCollectionViewCell: BaseCollectionViewCell {
         likeButton.setImage(UIImage(systemName: imageName), for: .normal)
     }
     
-    
-    //셀에 데이터를 넣는 함수
-    func configure(with item: Item) {
+    //⭐️⭐️⭐️
+    //셀에 좋아요를 선택한 정보를 넣기
+    func configure(with item: LikeTable) {
         mallNameLabel.text = item.mallName
-        // <b> 태그 제거
-        let cleanTitle = item.title.replacingOccurrences(of: "<b>", with: "").replacingOccurrences(of: "</b>", with: "")
-        titleLabel.text = cleanTitle
-        
-        // 가격을 콤마로 구분하여 표시
-        if let price = Int(item.lprice) {
-            let numberFormatter = NumberFormatter()
-            numberFormatter.numberStyle = .decimal
-            let formattedPrice = numberFormatter.string(from: NSNumber(value: price))
-            priceLabel.text = formattedPrice
-        } else {
-            priceLabel.text = item.lprice
-        }
+        titleLabel.text = item.title
+        priceLabel.text = item.lprice
         
         if let imageURL = URL(string: item.image) {
             imageView.kf.setImage(with: imageURL)

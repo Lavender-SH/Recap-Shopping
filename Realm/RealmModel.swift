@@ -16,14 +16,15 @@ class LikeTable: Object {
     @Persisted var image: String
     @Persisted var lprice: String
     @Persisted var mallName: String
+    @Persisted var likeDate: Date
 
-    convenience init(title: String, image: String, lprice: String, mallName: String) {
+    convenience init(title: String, image: String, lprice: String, mallName: String, likeDate: Date) {
         self.init()
         
         self.title = title
         self.image = image
         self.lprice = lprice
         self.mallName = mallName
+        self.likeDate = likeDate
     }
 }
-
