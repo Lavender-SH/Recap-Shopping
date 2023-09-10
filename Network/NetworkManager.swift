@@ -42,7 +42,7 @@ class NetworkManager {
             switch response.result {
             case .success(let value):
                 completion(value.items)
-                print("==22==", value.items)
+                //print("==22==", value.items)
             case .failure(let error):
                 print("Error: \(error)")
                 completion(nil)

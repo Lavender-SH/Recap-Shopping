@@ -17,6 +17,7 @@ class LikeTable: Object {
     @Persisted var lprice: String
     @Persisted var mallName: String
     @Persisted var likeDate: Date
+    @Persisted var likeButton: Bool //⭐️
 
     convenience init(title: String, image: String, lprice: String, mallName: String, likeDate: Date) {
         self.init()
@@ -26,5 +27,6 @@ class LikeTable: Object {
         self.lprice = lprice
         self.mallName = mallName
         self.likeDate = likeDate
+        self.likeButton = false //⭐️
     }
 }

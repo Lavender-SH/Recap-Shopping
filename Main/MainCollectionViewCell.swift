@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import RealmSwift
 
 class MainCollectionViewCell: BaseCollectionViewCell {
     
@@ -49,13 +50,11 @@ class MainCollectionViewCell: BaseCollectionViewCell {
         button.setImage(UIImage(systemName: "suit.heart"), for: .normal)
         button.backgroundColor = .white
         button.tintColor = .black
-        button.addTarget(self, action: #selector(toggleLike), for: .touchUpInside)
         button.layer.cornerRadius = 18
         button.clipsToBounds = true
         return button
     }()
     
-    var onLikeButtonTapped: ((Bool) -> Void)?
     
     override func configureView() {
         contentView.addSubview(imageView)
@@ -63,6 +62,7 @@ class MainCollectionViewCell: BaseCollectionViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(priceLabel)
         contentView.addSubview(likeButton)
+        likeButton.addTarget(self, action: #selector(toggleLike), for: .touchUpInside)
     }
     
     override func setConstraints() {
@@ -96,27 +96,44 @@ class MainCollectionViewCell: BaseCollectionViewCell {
         }
         
     }
-    
+    var item: Item?
     // MARK: - likeButton을 눌렀을때 하트의 이미지가 바뀌는 로직
+    var onLikeButtonTapped: ((Bool) -> Void)?
+
     var isLiked: Bool = false {
         didSet {
             updateLikeButtonImage()
         }
     }
-    
+
     @objc func toggleLike() {
+        print(#function)
         isLiked.toggle()
         onLikeButtonTapped?(isLiked)
+        if isLiked {
+            guard let item = self.item else { return }
+            let repository = LikeTableRepository()
+            repository.saveItem(item)
+//            if !repository.isItemLiked(item: item) {
+//                repository.saveItem(item)
+//            }
+        } else {
+            guard let item = self.item else { return }
+            let repository = LikeTableRepository()
+            repository.deleteItem(item)
+        }
     }
-    
+
+
     private func updateLikeButtonImage() {
         let imageName = isLiked ? "suit.heart.fill" : "suit.heart"
         likeButton.setImage(UIImage(systemName: imageName), for: .normal)
     }
-    
+     
     
     //셀에 데이터를 넣는 함수
     func configure(with item: Item) {
+        self.item = item
         mallNameLabel.text = item.mallName
         // <b> 태그 제거
         let cleanTitle = item.title.replacingOccurrences(of: "<b>", with: "").replacingOccurrences(of: "</b>", with: "")

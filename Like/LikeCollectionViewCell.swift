@@ -117,6 +117,7 @@ class LikeCollectionViewCell: BaseCollectionViewCell {
         mallNameLabel.text = item.mallName
         titleLabel.text = item.title
         priceLabel.text = item.lprice
+        likeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
         
         if let imageURL = URL(string: item.image) {
             imageView.kf.setImage(with: imageURL)

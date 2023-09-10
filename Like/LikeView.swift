@@ -35,12 +35,18 @@ class LikeView: BaseView {
     
     override func configureView() {
         addSubview(searchBar)
+        addSubview(collectionView)
     }
     
     override func setConstraints() {
         searchBar.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.horizontalEdges.equalToSuperview()
+        }
+        collectionView.snp.makeConstraints { make in
+            make.horizontalEdges.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.top.equalTo(searchBar.snp.bottom).offset(10)
         }
     }
     

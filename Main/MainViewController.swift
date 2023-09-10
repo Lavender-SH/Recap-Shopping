@@ -17,7 +17,7 @@ class MainViewController: BaseViewController {
     var isEnd = false
     var start = 1
     //⭐️⭐️⭐️
-    var tasks: Results<LikeTable>!
+    var likedItems: Results<LikeTable>!
     let realm = try! Realm()
     let repository = LikeTableRepository()
     
@@ -35,6 +35,7 @@ class MainViewController: BaseViewController {
         mainView.collectionView.backgroundColor = .black
         mainView.collectionView.prefetchDataSource = self
         //loadData(query: "자전거")
+        print(realm.configuration.fileURL)
         
         
     }
@@ -44,7 +45,7 @@ class MainViewController: BaseViewController {
             self.shopItems.append(contentsOf: items)
             self.mainView.collectionView.reloadData()
             print(#function)
-            print(items)
+            //print(items)
         }
     }
     
@@ -77,6 +78,8 @@ class MainViewController: BaseViewController {
         if let cancelButton = mainView.searchBar.value(forKey: "cancelButton") as? UIButton {
             cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: UIControl.Event.touchUpInside)
         }
+        
+        
     }
     
     @objc func cancelButtonTapped() {
@@ -134,7 +137,6 @@ class MainViewController: BaseViewController {
     override func setConstraints() {
         
     }
-    
 }
 extension MainViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -164,12 +166,11 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         cell.configure(with: item)
         cell.backgroundColor = .clear
         //⭐️⭐️⭐️
-        cell.toggleLike()
-        cell.onLikeButtonTapped = { [weak self] isLiked in
-            if isLiked {
-                self?.repository.saveItem(item)
-            }
-        }
+//        cell.onLikeButtonTapped = { [weak self] isLiked in
+//            if isLiked {
+//                self?.repository.saveItem(item)
+//            }
+//        }
         
         return cell
     }
@@ -204,10 +205,3 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
 
 }
-
-
-
-
-
-
-
