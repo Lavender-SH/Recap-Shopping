@@ -39,7 +39,9 @@ class LikeTableRepository: LikeTableRepositoryType {
     }
     
     func deleteItem(_ item: Item) {
-        let data = realm.objects(LikeTable.self).sorted(byKeyPath: "likeDate", ascending: true)
+        let data = realm.objects(LikeTable.self).where {
+            $0.likeButton == true
+        }
         
         try! realm.write {
             realm.delete(data)
@@ -62,7 +64,7 @@ class LikeTableRepository: LikeTableRepositoryType {
     
     func fetchFilter() -> RealmSwift.Results<LikeTable>{
         let result = realm.objects(LikeTable.self).where {
-            $0.likeButton == true
+            $0.likeButton == false
         }
         return result
     }

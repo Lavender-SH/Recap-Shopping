@@ -25,11 +25,9 @@ class LikeViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         likeMakeNavigationUI()
-        
         likeView.searchBar.delegate = self
         likeView.collectionView.delegate = self
         likeView.collectionView.dataSource = self
-        likeView.collectionView.backgroundColor = .black
         //⭐️⭐️⭐️ 좋아요 데이터 불러오기
         likedItems = repository.fetchFilter()
         likeView.collectionView.reloadData()
@@ -77,13 +75,16 @@ extension LikeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LikeCollectionViewCellIdentifier", for: indexPath) as? LikeCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LikeCollectionViewCell", for: indexPath) as? LikeCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        guard indexPath.row < likedItems.count else {
             return UICollectionViewCell()
         }
         //⭐️⭐️⭐️
         let item = likedItems[indexPath.row]
         cell.configure(with: item)
-        cell.backgroundColor = .yellow
+        cell.backgroundColor = .clear
         return cell
     }
 }

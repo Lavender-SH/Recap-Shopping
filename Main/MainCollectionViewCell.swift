@@ -144,9 +144,9 @@ class MainCollectionViewCell: BaseCollectionViewCell {
             let numberFormatter = NumberFormatter()
             numberFormatter.numberStyle = .decimal
             let formattedPrice = numberFormatter.string(from: NSNumber(value: price))
-            priceLabel.text = formattedPrice
+            priceLabel.text = "\(formattedPrice!)원"
         } else {
-            priceLabel.text = item.lprice
+            priceLabel.text = "\(item.lprice)원"
         }
         
         if let imageURL = URL(string: item.image) {

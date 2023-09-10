@@ -115,8 +115,16 @@ class LikeCollectionViewCell: BaseCollectionViewCell {
     //셀에 좋아요를 선택한 정보를 넣기
     func configure(with item: LikeTable) {
         mallNameLabel.text = item.mallName
-        titleLabel.text = item.title
-        priceLabel.text = item.lprice
+        let cleanTitle = item.title.replacingOccurrences(of: "<b>", with: "").replacingOccurrences(of: "</b>", with: "")
+        titleLabel.text = cleanTitle
+        if let price = Int(item.lprice) {
+            let numberFormatter = NumberFormatter()
+            numberFormatter.numberStyle = .decimal
+            let formattedPrice = numberFormatter.string(from: NSNumber(value: price))
+            priceLabel.text = "\(formattedPrice!)원"
+        } else {
+            priceLabel.text = "\(item.lprice)원"
+        }
         likeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
         
         if let imageURL = URL(string: item.image) {

@@ -34,7 +34,7 @@ class MainViewController: BaseViewController {
         mainView.collectionView.dataSource = self
         mainView.collectionView.backgroundColor = .black
         mainView.collectionView.prefetchDataSource = self
-        //loadData(query: "자전거")
+        loadData(query: "전체 상품")
         print(realm.configuration.fileURL)
         
         

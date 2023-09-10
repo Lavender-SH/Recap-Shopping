@@ -29,6 +29,7 @@ class LikeView: BaseView {
         let view = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout())
         view.register(LikeCollectionViewCell.self, forCellWithReuseIdentifier: "LikeCollectionViewCell")
         view.collectionViewLayout = collectionViewLayout()
+        view.backgroundColor = .black
         return view
     }()
     
@@ -36,20 +37,21 @@ class LikeView: BaseView {
     override func configureView() {
         addSubview(searchBar)
         addSubview(collectionView)
+        print(#function)
     }
     
     override func setConstraints() {
         searchBar.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.horizontalEdges.equalToSuperview()
+            make.height.equalTo(50)
         }
         collectionView.snp.makeConstraints { make in
             make.horizontalEdges.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.top.equalTo(searchBar.snp.bottom).offset(10)
+            make.top.equalTo(searchBar.snp.bottom).offset(78)
         }
     }
-    
     private func collectionViewLayout() -> UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 20
