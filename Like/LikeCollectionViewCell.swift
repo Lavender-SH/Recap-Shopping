@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 import Kingfisher
-
+import RealmSwift
 class LikeCollectionViewCell: BaseCollectionViewCell {
     
     
@@ -49,7 +49,6 @@ class LikeCollectionViewCell: BaseCollectionViewCell {
         button.setImage(UIImage(systemName: "suit.heart"), for: .normal)
         button.backgroundColor = .white
         button.tintColor = .black
-        button.addTarget(self, action: #selector(toggleLike), for: .touchUpInside)
         button.layer.cornerRadius = 18
         button.clipsToBounds = true
         return button
@@ -61,6 +60,7 @@ class LikeCollectionViewCell: BaseCollectionViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(priceLabel)
         contentView.addSubview(likeButton)
+        likeButton.addTarget(self, action: #selector(toggleLike), for: .touchUpInside)
     }
     
     override func setConstraints() {
@@ -95,7 +95,9 @@ class LikeCollectionViewCell: BaseCollectionViewCell {
         
     }
     
-    // MARK: - likeButton을 눌렀을때 하트의 이미지가 바뀌는 로직
+    // MARK: - 좋아요 버튼 로직
+    var item: LikeTable?
+    var onItemDeleted: (() -> Void)?
     var isLiked: Bool = false {
         didSet {
             updateLikeButtonImage()
@@ -103,7 +105,15 @@ class LikeCollectionViewCell: BaseCollectionViewCell {
     }
     
     @objc func toggleLike() {
-        isLiked.toggle()
+        print(#function)
+        //isLiked.toggle()
+        print("==77==", isLiked)
+        //if isLiked {
+            guard let item = self.item else { return }
+            let repository = LikeTableRepository()
+            repository.deleteItem(item)
+            onItemDeleted?()
+        //}
     }
     
     private func updateLikeButtonImage() {
@@ -114,6 +124,7 @@ class LikeCollectionViewCell: BaseCollectionViewCell {
     //⭐️⭐️⭐️
     //셀에 좋아요를 선택한 정보를 넣기
     func configure(with item: LikeTable) {
+        self.item = item
         mallNameLabel.text = item.mallName
         let cleanTitle = item.title.replacingOccurrences(of: "<b>", with: "").replacingOccurrences(of: "</b>", with: "")
         titleLabel.text = cleanTitle

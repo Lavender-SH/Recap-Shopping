@@ -85,6 +85,9 @@ extension LikeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         let item = likedItems[indexPath.row]
         cell.configure(with: item)
         cell.backgroundColor = .clear
+        cell.onItemDeleted = { [weak self] in
+            self?.likeView.collectionView.reloadData()
+        }
         return cell
     }
 }

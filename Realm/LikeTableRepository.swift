@@ -15,6 +15,10 @@ protocol LikeTableRepositoryType: AnyObject {
     func findFileURL() -> URL?
 }
 
+protocol TitleProtocol {
+    var title: String { get }
+}
+
 class LikeTableRepository: LikeTableRepositoryType {
     private let realm = try! Realm()
     
@@ -31,23 +35,31 @@ class LikeTableRepository: LikeTableRepositoryType {
         }.first
         
         if existingItem == nil {
-            let likeItem = LikeTable(title: item.title, image: item.image, lprice: item.lprice, mallName: item.mallName, likeDate: Date())
+            let likeItem = LikeTable(title: item.title, image: item.image, lprice: item.lprice, mallName: item.mallName, likeDate: Date(), likeButton: true)
             try! realm.write {
                 realm.add(likeItem)
             }
         }
     }
     
-    func deleteItem(_ item: Item) {
-        let data = realm.objects(LikeTable.self).where {
-            $0.likeButton == true
-        }
-        
-        try! realm.write {
-            realm.delete(data)
+//    func deleteItem(_ item: Item) {
+//        let data = realm.object(LikeTable.self).where {
+//            $0.likeButton == true
+//        }
+//
+//        try! realm.write {
+//            realm.delete(data)
+//        }
+//    }
+
+    func deleteItem<T: TitleProtocol>(_ item: T) {
+        if let objectToDelete = realm.objects(LikeTable.self).filter("title == %@", item.title).first {
+            try! realm.write {
+                realm.delete(objectToDelete)
+            }
         }
     }
-    
+
     
     //⭐️⭐️⭐️좋아요 데이터 저장하기
     //    func saveItem(_ item: Item) {

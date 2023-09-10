@@ -14,6 +14,11 @@ class WebViewController: UIViewController, WKUIDelegate {
     var webView = WKWebView()
     var productID: String?
     var webViewTitle: String?
+    var isLiked: Bool = false {
+        didSet {
+            updateLikeButtonImage()
+        }
+    }
     
     
     override func viewDidLoad() {
@@ -71,7 +76,12 @@ class WebViewController: UIViewController, WKUIDelegate {
         navigationController?.popViewController(animated: true)
     }
     @objc func detailLikeButtonTapped() {
+        isLiked.toggle()
         
     }
-    
+    private func updateLikeButtonImage() {
+        let imageName = isLiked ? "suit.heart.fill" : "suit.heart"
+        navigationItem.rightBarButtonItem?.image = UIImage(systemName: imageName)
+    }
+
 }

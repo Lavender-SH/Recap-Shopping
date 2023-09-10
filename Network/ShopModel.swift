@@ -13,7 +13,7 @@ struct Shop: Codable {
 }
 
 // MARK: - Item
-struct Item: Codable {
+struct Item: Codable, TitleProtocol {
     let title: String
     let image: String
     let lprice: String
