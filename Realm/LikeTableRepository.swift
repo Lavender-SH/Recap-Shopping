@@ -15,20 +15,15 @@ protocol LikeTableRepositoryType: AnyObject {
     func findFileURL() -> URL?
 }
 
-protocol TitleProtocol {
-    var title: String { get }
-}
-
 class LikeTableRepository: LikeTableRepositoryType {
     private let realm = try! Realm()
     
-    //⭐️⭐️⭐️데이터 가져오기 날짜순으로
+    //데이터 가져오기 날짜순으로
     func fetch() -> RealmSwift.Results<LikeTable> {
         let data = realm.objects(LikeTable.self).sorted(byKeyPath: "likeDate", ascending: true)
         return data
     }
-    
-    
+    //아이템 저장
     func saveItem(_ item: Item) {
         let existingItem = realm.objects(LikeTable.self).where {
             $0.title == item.title
@@ -41,17 +36,7 @@ class LikeTableRepository: LikeTableRepositoryType {
             }
         }
     }
-    
-//    func deleteItem(_ item: Item) {
-//        let data = realm.object(LikeTable.self).where {
-//            $0.likeButton == true
-//        }
-//
-//        try! realm.write {
-//            realm.delete(data)
-//        }
-//    }
-
+    //아이템삭제
     func deleteItem<T: TitleProtocol>(_ item: T) {
         if let objectToDelete = realm.objects(LikeTable.self).filter("title == %@", item.title).first {
             try! realm.write {
@@ -59,32 +44,17 @@ class LikeTableRepository: LikeTableRepositoryType {
             }
         }
     }
-
-    
-    //⭐️⭐️⭐️좋아요 데이터 저장하기
-    //    func saveItem(_ item: Item) {
-    //        let likeItem = LikeTable(title: item.title, image: item.image, lprice: item.lprice, mallName: item.mallName, likeDate: Date())
-    //        try! realm.write {
-    //            realm.add(likeItem)
-    //        }
-    //    }
-    //
-    //    func isItemLiked(item: Item) -> Bool {
-    //        let existingItem = realm.objects(LikeTable.self).filter("title == %@", item.title).first
-    //        return existingItem != nil
-    //    }
-    
+    //좋아요 버튼 아이템만 거르기(미완)
     func fetchFilter() -> RealmSwift.Results<LikeTable>{
         let result = realm.objects(LikeTable.self).where {
             $0.likeButton == false
         }
         return result
     }
-    
+    //파일경로
     func findFileURL() -> URL? {
         let fileURL = realm.configuration.fileURL // 실제 데이터 저장 파일 경로
         return fileURL
     }
     
 }
-

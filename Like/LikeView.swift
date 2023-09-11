@@ -37,7 +37,7 @@ class LikeView: BaseView {
     override func configureView() {
         addSubview(searchBar)
         addSubview(collectionView)
-        print(#function)
+        //print(#function)
     }
     
     override func setConstraints() {
@@ -52,6 +52,7 @@ class LikeView: BaseView {
             make.top.equalTo(searchBar.snp.bottom).offset(78)
         }
     }
+    
     private func collectionViewLayout() -> UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 20

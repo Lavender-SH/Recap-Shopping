@@ -78,6 +78,7 @@ class MainView: BaseView {
         let view = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout())
         view.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: "MainCollectionViewCell")
         view.collectionViewLayout = collectionViewLayout()
+        view.backgroundColor = .black
         return view
     }()
 
@@ -86,7 +87,6 @@ class MainView: BaseView {
         [searchBar, accuracyButton, dateButton, upPriceButton, downPriceButton, collectionView].forEach {
             addSubview($0)
         }
-
     }
     
     override func setConstraints() {
@@ -125,7 +125,6 @@ class MainView: BaseView {
         }
     }
     
-    
     private func collectionViewLayout() -> UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 20
@@ -135,10 +134,6 @@ class MainView: BaseView {
         layer.cornerRadius = 20
         return layout
     }
-                                   
-    
-    
-    
-    
+
 }
 

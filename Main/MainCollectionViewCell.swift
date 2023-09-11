@@ -11,7 +11,10 @@ import Kingfisher
 import RealmSwift
 
 class MainCollectionViewCell: BaseCollectionViewCell {
-    
+    //Realm 관련 변수
+    var likedItems: Results<LikeTable>!
+    let realm = try! Realm()
+    let repository = LikeTableRepository()
     
     let imageView = {
         let view = UIImageView()
@@ -96,9 +99,9 @@ class MainCollectionViewCell: BaseCollectionViewCell {
         }
         
     }
+    
+    // MARK: - 좋아요 버튼 로직
     var item: Item?
-    // MARK: - likeButton을 눌렀을때 하트의 이미지가 바뀌는 로직
-    var onLikeButtonTapped: ((Bool) -> Void)?
 
     var isLiked: Bool = false {
         didSet {
@@ -109,22 +112,18 @@ class MainCollectionViewCell: BaseCollectionViewCell {
     @objc func toggleLike() {
         print(#function)
         isLiked.toggle()
-        onLikeButtonTapped?(isLiked)
         if isLiked {
             guard let item = self.item else { return }
             let repository = LikeTableRepository()
             repository.saveItem(item)
-//            if !repository.isItemLiked(item: item) {
-//                repository.saveItem(item)
-//            }
+
         } else {
             guard let item = self.item else { return }
             let repository = LikeTableRepository()
             repository.deleteItem(item)
         }
     }
-
-
+    
     private func updateLikeButtonImage() {
         let imageName = isLiked ? "suit.heart.fill" : "suit.heart"
         likeButton.setImage(UIImage(systemName: imageName), for: .normal)
@@ -134,7 +133,9 @@ class MainCollectionViewCell: BaseCollectionViewCell {
     //셀에 데이터를 넣는 함수
     func configure(with item: Item) {
         self.item = item
+        
         mallNameLabel.text = item.mallName
+        
         // <b> 태그 제거
         let cleanTitle = item.title.replacingOccurrences(of: "<b>", with: "").replacingOccurrences(of: "</b>", with: "")
         titleLabel.text = cleanTitle
@@ -152,7 +153,8 @@ class MainCollectionViewCell: BaseCollectionViewCell {
         if let imageURL = URL(string: item.image) {
             imageView.kf.setImage(with: imageURL)
         }
+        let existingItem = realm.objects(LikeTable.self).filter("title == %@", item.title).first
+            isLiked = existingItem != nil
     }
-    
     
 }

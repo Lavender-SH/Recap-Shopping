@@ -9,8 +9,9 @@ import UIKit
 import SnapKit
 import Kingfisher
 import RealmSwift
+
+
 class LikeCollectionViewCell: BaseCollectionViewCell {
-    
     
     let imageView = {
         let view = UIImageView()
@@ -97,23 +98,22 @@ class LikeCollectionViewCell: BaseCollectionViewCell {
     
     // MARK: - 좋아요 버튼 로직
     var item: LikeTable?
-    var onItemDeleted: (() -> Void)?
+
     var isLiked: Bool = false {
         didSet {
             updateLikeButtonImage()
         }
     }
-    
+    //컬렉션뷰 갱신을 위해 클로저 변수 생성
+    var onItemDeleted: (() -> Void)?
+
     @objc func toggleLike() {
-        print(#function)
-        //isLiked.toggle()
-        print("==77==", isLiked)
-        //if isLiked {
-            guard let item = self.item else { return }
-            let repository = LikeTableRepository()
-            repository.deleteItem(item)
-            onItemDeleted?()
-        //}
+        //print(#function)
+        //print("==77==", isLiked)
+        guard let item = self.item else { return }
+        let repository = LikeTableRepository()
+        repository.deleteItem(item)
+        onItemDeleted?() // 컬렉션뷰 갱신
     }
     
     private func updateLikeButtonImage() {
@@ -121,13 +121,17 @@ class LikeCollectionViewCell: BaseCollectionViewCell {
         likeButton.setImage(UIImage(systemName: imageName), for: .normal)
     }
     
-    //⭐️⭐️⭐️
     //셀에 좋아요를 선택한 정보를 넣기
-    func configure(with item: LikeTable) {
-        self.item = item
+    func configure(with item: DisplayableItem) {
+        self.item = item as? LikeTable
+        
         mallNameLabel.text = item.mallName
+        
+        // <b> 태그 제거
         let cleanTitle = item.title.replacingOccurrences(of: "<b>", with: "").replacingOccurrences(of: "</b>", with: "")
         titleLabel.text = cleanTitle
+        
+        // 가격을 콤마로 구분하여 표시
         if let price = Int(item.lprice) {
             let numberFormatter = NumberFormatter()
             numberFormatter.numberStyle = .decimal
@@ -136,13 +140,13 @@ class LikeCollectionViewCell: BaseCollectionViewCell {
         } else {
             priceLabel.text = "\(item.lprice)원"
         }
+        
         likeButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
         
         if let imageURL = URL(string: item.image) {
             imageView.kf.setImage(with: imageURL)
         }
     }
-    
     
 }
 

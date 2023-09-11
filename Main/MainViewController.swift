@@ -12,18 +12,21 @@ import RealmSwift
 class MainViewController: BaseViewController {
     
     let mainView = MainView()
-    var shopManager = NetworkManager.shared
-    var shopItems: [Item] = []
-    var isEnd = false
-    var start = 1
-    //⭐️⭐️⭐️
-    var likedItems: Results<LikeTable>!
-    let realm = try! Realm()
-    let repository = LikeTableRepository()
     
     override func loadView() {
         self.view = mainView
     }
+    //Networking 변수
+    var shopManager = NetworkManager.shared
+    var shopItems: [Item] = []
+    //Realm 변수
+    var likedItems: Results<LikeTable>!
+    let realm = try! Realm()
+    let repository = LikeTableRepository()
+    //pagination 변수
+    var isEnd = false
+    var start = 1
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,13 +35,11 @@ class MainViewController: BaseViewController {
         mainView.searchBar.delegate = self
         mainView.collectionView.delegate = self
         mainView.collectionView.dataSource = self
-        mainView.collectionView.backgroundColor = .black
         mainView.collectionView.prefetchDataSource = self
-        loadData(query: "전체 상품")
-        print(realm.configuration.fileURL)
-        
-        
+        //loadData(query: "전체 상품")
+        //print(realm.configuration.fileURL)
     }
+    // MARK: - 네트워킹
     func loadData(query: String) {
         shopManager.ShoppingCallRequest(query: query) { items in
             guard let items = items else { return }
@@ -48,7 +49,7 @@ class MainViewController: BaseViewController {
             //print(items)
         }
     }
-    
+    // MARK: - 네비게이션UI
     func makeNavigationUI() {
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = .black
@@ -78,16 +79,17 @@ class MainViewController: BaseViewController {
         if let cancelButton = mainView.searchBar.value(forKey: "cancelButton") as? UIButton {
             cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: UIControl.Event.touchUpInside)
         }
-        
-        
     }
-    
+    override func setConstraints() { }
+
+    // MARK: - 취소버튼 초기화
     @objc func cancelButtonTapped() {
         shopItems.removeAll()
         mainView.collectionView.reloadData()
         navigationController?.popViewController(animated: true)
     }
-        
+    
+    // MARK: - 정렬버튼 컬러변경
     @objc func toggleButtonColor(sender: UIButton) {
         // 모든 버튼의 상태를 초기화
         let allButtons = [mainView.accuracyButton, mainView.dateButton, mainView.upPriceButton, mainView.downPriceButton]
@@ -96,7 +98,6 @@ class MainViewController: BaseViewController {
             button.backgroundColor = .black
             button.setTitleColor(.gray, for: .normal)
         }
-        
         // 선택된 버튼의 상태만 변경
         sender.isSelected.toggle()
         if sender.isSelected {
@@ -105,7 +106,7 @@ class MainViewController: BaseViewController {
         }
     }
     
-    
+    // MARK: - 정렬버튼 로직
     @objc func changeSort(sender: UIButton) {
         
         guard let query = mainView.searchBar.text else { return }
@@ -132,25 +133,27 @@ class MainViewController: BaseViewController {
             self.mainView.collectionView.reloadData()
         }
     }
-    
-    
-    override func setConstraints() {
-        
-    }
 }
+
+// MARK: - 확장: 서치바 관련 함수
 extension MainViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
         let text = mainView.searchBar.text!
         loadData(query: text)
-        
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         shopItems.removeAll()
         mainView.collectionView.reloadData()
     }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.isEmpty {
+            shopItems.removeAll()
+            mainView.collectionView.reloadData()
+        }
+    }
 }
 
+// MARK: - 확장: 컬렉션뷰 관련 함수
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDataSourcePrefetching {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -165,20 +168,13 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         let item = shopItems[indexPath.row]
         cell.configure(with: item)
         cell.backgroundColor = .clear
-        //⭐️⭐️⭐️
-//        cell.onLikeButtonTapped = { [weak self] isLiked in
-//            if isLiked {
-//                self?.repository.saveItem(item)
-//            }
-//        }
         
         return cell
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         for indexPath in indexPaths {
-            //print("=====99999999999======", shopItems.count, start)
+            //print("==999==", shopItems.count, start)
             guard let query = mainView.searchBar.text else { return }
             
             if shopItems.count - 1 == indexPath.row && !isEnd {
@@ -192,16 +188,15 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             }
         }
     }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = shopItems[indexPath.row]
         let webVC = WebViewController()
         webVC.productID = item.productID
-        
+        webVC.item = item
         let cleanTitle = item.title.replacingOccurrences(of: "<b>", with: "").replacingOccurrences(of: "</b>", with: "")
         webVC.webViewTitle = cleanTitle
         
         navigationController?.pushViewController(webVC, animated: true)
-        
     }
-
 }

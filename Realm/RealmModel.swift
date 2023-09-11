@@ -10,14 +10,14 @@ import RealmSwift
 
 import RealmSwift
 
-class LikeTable: Object, TitleProtocol {
+class LikeTable: Object, TitleProtocol, DisplayableItem {
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted var title: String
     @Persisted var image: String
     @Persisted var lprice: String
     @Persisted var mallName: String
     @Persisted var likeDate: Date
-    @Persisted var likeButton: Bool //⭐️
+    @Persisted var likeButton: Bool
 
     convenience init(title: String, image: String, lprice: String, mallName: String, likeDate: Date, likeButton: Bool) {
         self.init()
@@ -27,6 +27,6 @@ class LikeTable: Object, TitleProtocol {
         self.lprice = lprice
         self.mallName = mallName
         self.likeDate = likeDate
-        self.likeButton = false //⭐️
+        self.likeButton = false
     }
 }
