@@ -10,7 +10,6 @@ import SnapKit
 import Kingfisher
 import RealmSwift
 
-
 class LikeCollectionViewCell: BaseCollectionViewCell {
     
     let imageView = {
@@ -46,7 +45,8 @@ class LikeCollectionViewCell: BaseCollectionViewCell {
         return view
     }()
     let likeButton: UIButton = {
-        let button = UIButton(type: .system)
+//        let button = UIButton(type: .system)
+        let button = UIButton()
         button.setImage(UIImage(systemName: "suit.heart"), for: .normal)
         button.backgroundColor = .white
         button.tintColor = .black
@@ -108,7 +108,7 @@ class LikeCollectionViewCell: BaseCollectionViewCell {
     var onItemDeleted: (() -> Void)?
 
     @objc func toggleLike() {
-        //print(#function)
+        print(#function)
         //print("==77==", isLiked)
         guard let item = self.item else { return }
         let repository = LikeTableRepository()
@@ -122,8 +122,8 @@ class LikeCollectionViewCell: BaseCollectionViewCell {
     }
     
     //셀에 좋아요를 선택한 정보를 넣기
-    func configure(with item: DisplayableItem) {
-        self.item = item as? LikeTable
+    func configure(with item: LikeTable) {
+        self.item = item
         
         mallNameLabel.text = item.mallName
         
@@ -149,4 +149,5 @@ class LikeCollectionViewCell: BaseCollectionViewCell {
     }
     
 }
+
 

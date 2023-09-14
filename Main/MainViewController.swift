@@ -37,7 +37,7 @@ class MainViewController: BaseViewController {
         mainView.collectionView.dataSource = self
         mainView.collectionView.prefetchDataSource = self
         //loadData(query: "전체 상품")
-        //print(realm.configuration.fileURL)
+        print(realm.configuration.fileURL)
     }
     // MARK: - 네트워킹
     func loadData(query: String) {

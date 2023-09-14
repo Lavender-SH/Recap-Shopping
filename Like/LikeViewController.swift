@@ -10,7 +10,7 @@ import SnapKit
 import RealmSwift
 
 class LikeViewController: BaseViewController{
-
+    
     let likeView = LikeView()
     
     override func loadView() {
@@ -18,14 +18,11 @@ class LikeViewController: BaseViewController{
     }
     //Networking 변수
     var shopManager = NetworkManager.shared
-    var shopItems: [Item] = []
     //Realm 변수
     var likedItems: Results<LikeTable>!
+    var filteredLikedItems: Results<LikeTable>!
     let realm = try! Realm()
     let repository = LikeTableRepository()
-    //pagination 변수
-    var isEnd = false
-    var start = 1
     //서치바 관련 변수
     var isSearchActive = false
     
@@ -37,7 +34,7 @@ class LikeViewController: BaseViewController{
         likeView.searchBar.delegate = self
         likeView.collectionView.delegate = self
         likeView.collectionView.dataSource = self
-        likeView.collectionView.prefetchDataSource = self
+        
         //좋아요 데이터 불러오기
         likedItems = repository.fetchFilter()
         likeView.collectionView.reloadData()
@@ -48,16 +45,7 @@ class LikeViewController: BaseViewController{
         
         likeView.collectionView.reloadData()
     }
-    // MARK: - 네트워킹
-    func loadData(query: String) {
-        shopManager.ShoppingCallRequest(query: query) { items in
-            guard let items = items else { return }
-            self.shopItems.append(contentsOf: items)
-            self.likeView.collectionView.reloadData()
-            //print(#function)
-            //print(items)
-        }
-    }
+    
     // MARK: - 네비게이션UI
     func likeMakeNavigationUI() {
         let appearance = UINavigationBarAppearance()
@@ -79,80 +67,63 @@ class LikeViewController: BaseViewController{
     
 }
 // MARK: - 확장: 컬렉션뷰 관련 함수
-extension LikeViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDataSourcePrefetching {
+extension LikeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return isSearchActive ? shopItems.count : likedItems.count //⭐️⭐️⭐️
+        if isSearchActive {
+            return filteredLikedItems.count
+        }
+        return likedItems.count
     }
+    
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LikeCollectionViewCell", for: indexPath) as? LikeCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        
-        if isSearchActive {
-            guard indexPath.row < shopItems.count else {
-                return UICollectionViewCell()
-            }
-            let shopItem = shopItems[indexPath.row]
-            cell.configure(with: shopItem)
-            likeView.collectionView.reloadData()
- 
-        } else {
-            guard indexPath.row < likedItems.count else {
-                return UICollectionViewCell()
-            }
-            let item = likedItems[indexPath.row]
-            cell.configure(with: item)
-            likeView.collectionView.reloadData()
-        }
-        
-        cell.backgroundColor = .clear
-        cell.onItemDeleted = { [weak self] in
-            self?.likeView.collectionView.reloadData()
-        }
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        //print("==66==", #function)
-        for indexPath in indexPaths {
-            guard let query = likeView.searchBar.text else { return }
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LikeCollectionViewCell", for: indexPath) as! LikeCollectionViewCell
             
-            if isSearchActive && shopItems.count - 1 == indexPath.row && !isEnd {
-                start += 1
-                
-                shopManager.ShoppingCallRequest(query: query) { items in
-                    guard let items = items else { return }
-                    self.shopItems.append(contentsOf: items)
-                    self.likeView.collectionView.reloadData()
-                }
+            let item: LikeTable
+            if isSearchActive {
+                item = filteredLikedItems[indexPath.row]
+            } else {
+                item = likedItems[indexPath.row]
             }
+            
+            cell.configure(with: item)
+            cell.onItemDeleted = {
+                self.likedItems = self.repository.fetchFilter()
+                collectionView.reloadData()
+            }
+            
+            return cell
         }
-    }
+    
+    
 }
-
 
 // MARK: - 확장: 서치바 관련 함수
 extension LikeViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        let text = likeView.searchBar.text!
-        shopItems.removeAll()
-        loadData(query: text)
+        guard let text = likeView.searchBar.text, !text.isEmpty else {
+            return
+        }
+        filteredLikedItems = likedItems.filter("title CONTAINS[c] %@", text)
         isSearchActive = true
+        likeView.collectionView.reloadData()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        likedItems = repository.fetchFilter()
-        likeView.collectionView.reloadData()
         isSearchActive = false
+        likeView.collectionView.reloadData()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty {
-            likedItems = repository.fetchFilter()
-            likeView.collectionView.reloadData()
             isSearchActive = false
+            likeView.collectionView.reloadData()
+        } else {
+            filteredLikedItems = likedItems.filter("title CONTAINS[c] %@", searchText)
+            isSearchActive = true
+            likeView.collectionView.reloadData()
         }
     }
 }
+
