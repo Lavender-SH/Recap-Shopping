@@ -25,6 +25,8 @@ class LikeViewController: BaseViewController{
     let repository = LikeTableRepository()
     //서치바 관련 변수
     var isSearchActive = false
+   
+    
     
     
     override func viewDidLoad() {
@@ -43,7 +45,8 @@ class LikeViewController: BaseViewController{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        likeView.collectionView.reloadData()
+            likeView.collectionView.reloadData()
+        print("=789=", #function)
     }
     
     // MARK: - 네비게이션UI
@@ -96,11 +99,12 @@ extension LikeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             return cell
         }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let item = likedItems[indexPath.row]
+        let likeItem = likedItems[indexPath.row]
         let webVC = WebViewController()
-        webVC.productID = item.productID
-        webVC.likeItem = item
-        let cleanTitle = item.title.replacingOccurrences(of: "<b>", with: "").replacingOccurrences(of: "</b>", with: "")
+        print("456", likeItem.productID)
+        webVC.likeProductID = likeItem.productID
+        webVC.likeItem = likeItem
+        let cleanTitle = likeItem.title.replacingOccurrences(of: "<b>", with: "").replacingOccurrences(of: "</b>", with: "")
         webVC.webViewTitle = cleanTitle
         
         navigationController?.pushViewController(webVC, animated: true)

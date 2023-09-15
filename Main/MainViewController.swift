@@ -116,7 +116,8 @@ class MainViewController: BaseViewController {
     // MARK: - 정렬버튼 로직
     @objc func changeSort(sender: UIButton) {
         
-        guard let query = mainView.searchBar.text else { return }
+        //guard let query = mainView.searchBar.text else { return }
+        guard let query = mainView.searchBar.text, !query.isEmpty else { return }
         
         var sortValue: String
         switch sender {
@@ -145,7 +146,7 @@ class MainViewController: BaseViewController {
 // MARK: - 확장: 서치바 관련 함수
 extension MainViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        let text = mainView.searchBar.text!
+        guard let text = mainView.searchBar.text, !text.trimmingCharacters(in: .whitespaces).isEmpty else { return }
         loadData(query: text)
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

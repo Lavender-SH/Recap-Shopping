@@ -14,6 +14,7 @@ class WebViewController: UIViewController, WKUIDelegate {
     
     var webView = WKWebView()
     var productID: String?
+    var likeProductID: String?
     var webViewTitle: String?
     var item: Item?
     var likeItem: LikeTable?
@@ -22,6 +23,7 @@ class WebViewController: UIViewController, WKUIDelegate {
             updateLikeButtonImage()
         }
     }
+    var likeViewWillAppear: (() -> Void)?
     
     
     override func viewDidLoad() {
@@ -56,7 +58,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         backButton.setTitle("쇼핑 검색", for: .normal)
         backButton.addTarget(self, action: #selector(backToMainView), for: .touchUpInside)
         backButton.tintColor = .white
-
+        
         let backBarButtonItem = UIBarButtonItem(customView: backButton)
         navigationItem.leftBarButtonItem = backBarButtonItem
         
@@ -67,33 +69,51 @@ class WebViewController: UIViewController, WKUIDelegate {
         if #available(iOS 15.0, *) {
             self.tabBarController?.tabBar.scrollEdgeAppearance = tabBarAppearance
         }
-        //웹뷰 띄우기
+        
         if let productID = productID {
             let urlString = "https://msearch.shopping.naver.com/product/\(productID)"
             if let url = URL(string: urlString) {
                 let request = URLRequest(url: url)
                 webView.load(request)
             }
+        } else if let likeProductID = likeProductID {
+            let urlString = "https://msearch.shopping.naver.com/product/\(likeProductID)"
+            if let url = URL(string: urlString) {
+                let request = URLRequest(url: url)
+                webView.load(request)
+            }
         }
+
         
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        checkIfProductIsLiked()
+        //        let likeVC = LikeViewController()
+        //        likeVC.likeView.collectionView.reloadData()
+        print(#function, "==7777==")
     }
     //백버튼 뒤로 돌아가기
     @objc func backToMainView() {
         navigationController?.popViewController(animated: true)
+        //        viewWillAppear(true)
     }
     
-    // MARK: - 좋아요 버튼 눌렀을때 정보를 저장하는 로직
+    //MARK: - 좋아요 버튼 눌렀을때 정보를 저장하는 로직
     @objc func detailLikeButtonTapped() {
         isLiked.toggle()
-        if isLiked {
+        if isLiked { print("=5=", isLiked)
             guard let item = self.item else { return }
             let repository = LikeTableRepository()
             repository.saveItem(item)
-
-        } else {
-            guard let item = self.item else { return }
+            
+        } else { print("=6=", isLiked)
             let repository = LikeTableRepository()
-            repository.deleteItem(item)
+            if let item = self.item {
+                repository.deleteItem(item)
+            } else {
+                guard let likeItem = self.likeItem else { return }
+                repository.deleteItem(likeItem)
+            }
         }
     }
     
@@ -103,8 +123,14 @@ class WebViewController: UIViewController, WKUIDelegate {
         navigationItem.rightBarButtonItem?.image = UIImage(systemName: imageName)
     }
     
+    func checkIfProductIsLiked() {
+        let repository = LikeTableRepository()
+        let likedItems = repository.fetch()
+        if let productID = self.productID, likedItems.contains(where: { $0.productID == productID }) {
+            isLiked = true
+        } else {
+            isLiked = false
+        }
+    }
     
-    
-    
-
 }
