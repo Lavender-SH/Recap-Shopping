@@ -26,6 +26,7 @@ class MainViewController: BaseViewController {
     //pagination 변수
     var isEnd = false
     var start = 1
+    var isRequesting = false
     
     
     override func viewDidLoad() {
@@ -116,7 +117,8 @@ class MainViewController: BaseViewController {
     // MARK: - 정렬버튼 로직
     @objc func changeSort(sender: UIButton) {
         
-        //guard let query = mainView.searchBar.text else { return }
+        guard !isRequesting else { return }
+
         guard let query = mainView.searchBar.text, !query.isEmpty else { return }
         
         var sortValue: String
@@ -134,8 +136,9 @@ class MainViewController: BaseViewController {
         }
         
         self.shopItems.removeAll()
-        
+        isRequesting = true
         NetworkManager.shared.ShoppingCallRequest(query: query, sort: sortValue) { items in
+            self.isRequesting = false
             guard let items = items else { return }
             self.shopItems.append(contentsOf: items)
             self.mainView.collectionView.reloadData()
