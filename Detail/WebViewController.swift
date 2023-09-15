@@ -7,6 +7,7 @@
 
 import Foundation
 import WebKit
+import RealmSwift
 
 
 class WebViewController: UIViewController, WKUIDelegate {
@@ -15,6 +16,7 @@ class WebViewController: UIViewController, WKUIDelegate {
     var productID: String?
     var webViewTitle: String?
     var item: Item?
+    var likeItem: LikeTable?
     var isLiked: Bool = false {
         didSet {
             updateLikeButtonImage()
@@ -100,5 +102,9 @@ class WebViewController: UIViewController, WKUIDelegate {
         let imageName = isLiked ? "suit.heart.fill" : "suit.heart"
         navigationItem.rightBarButtonItem?.image = UIImage(systemName: imageName)
     }
+    
+    
+    
+    
 
 }

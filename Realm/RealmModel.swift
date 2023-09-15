@@ -18,8 +18,9 @@ class LikeTable: Object, TitleProtocol, DisplayableItem {
     @Persisted var mallName: String
     @Persisted var likeDate: Date
     @Persisted var likeButton: Bool
+    @Persisted var productID: String
 
-    convenience init(title: String, image: String, lprice: String, mallName: String, likeDate: Date, likeButton: Bool) {
+    convenience init(title: String, image: String, lprice: String, mallName: String, likeDate: Date, likeButton: Bool, productID: String) {
         self.init()
         
         self.title = title
@@ -28,5 +29,6 @@ class LikeTable: Object, TitleProtocol, DisplayableItem {
         self.mallName = mallName
         self.likeDate = likeDate
         self.likeButton = false
+        self.productID = productID
     }
 }

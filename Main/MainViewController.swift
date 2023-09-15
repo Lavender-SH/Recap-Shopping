@@ -39,6 +39,13 @@ class MainViewController: BaseViewController {
         //loadData(query: "전체 상품")
         print(realm.configuration.fileURL)
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        mainView.collectionView.reloadData()
+    }
+
     // MARK: - 네트워킹
     func loadData(query: String) {
         shopManager.ShoppingCallRequest(query: query) { items in

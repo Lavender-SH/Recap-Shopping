@@ -30,7 +30,7 @@ class LikeTableRepository: LikeTableRepositoryType {
         }.first
         
         if existingItem == nil {
-            let likeItem = LikeTable(title: item.title, image: item.image, lprice: item.lprice, mallName: item.mallName, likeDate: Date(), likeButton: true)
+            let likeItem = LikeTable(title: item.title, image: item.image, lprice: item.lprice, mallName: item.mallName, likeDate: Date(), likeButton: true, productID: item.productID)
             try! realm.write {
                 realm.add(likeItem)
             }

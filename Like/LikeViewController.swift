@@ -95,6 +95,16 @@ extension LikeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
             return cell
         }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item = likedItems[indexPath.row]
+        let webVC = WebViewController()
+        webVC.productID = item.productID
+        webVC.likeItem = item
+        let cleanTitle = item.title.replacingOccurrences(of: "<b>", with: "").replacingOccurrences(of: "</b>", with: "")
+        webVC.webViewTitle = cleanTitle
+        
+        navigationController?.pushViewController(webVC, animated: true)
+    }
     
     
 }

@@ -20,7 +20,7 @@ struct Item: Codable, TitleProtocol, DisplayableItem {
     let lprice: String
     let hprice: String
     let mallName: String
-    let productID: String?
+    let productID: String
     
 
 
@@ -32,3 +32,4 @@ struct Item: Codable, TitleProtocol, DisplayableItem {
 
 
 
+ 
