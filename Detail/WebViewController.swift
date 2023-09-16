@@ -120,26 +120,19 @@ class WebViewController: UIViewController, WKUIDelegate {
         let imageName = isLiked ? "suit.heart.fill" : "suit.heart"
         navigationItem.rightBarButtonItem?.image = UIImage(systemName: imageName)
     }
-    
+        
     func checkIfProductIsLiked() {
         let repository = LikeTableRepository()
         let likedItems = repository.fetch()
-        
         //메인화면에서 웹뷰로 넘어갈떄
         if let productID = self.productID, likedItems.contains(where: { $0.productID == productID }) {
             isLiked = true
-        } else {
-            isLiked = false
-        }
         //좋아요 화면에서 웹뷰로 넘어갈때
-        if let likeProductID = self.likeProductID,
-           likedItems.contains(where: { $0.productID == likeProductID }) {
+        } else if let likeProductID = self.likeProductID, likedItems.contains(where: { $0.productID == likeProductID }) {
             isLiked = true
         } else {
             isLiked = false
         }
     }
-    
-  
-    
+ 
 }
