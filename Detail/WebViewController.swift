@@ -48,7 +48,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.standardAppearance = appearance
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "suit.heart"), style: .plain, target: self, action: #selector(detailLikeButtonTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "suit.heart.fill"), style: .plain, target: self, action: #selector(detailLikeButtonTapped))
         navigationItem.title = webViewTitle
         navigationController?.navigationBar.tintColor = .white
         
@@ -87,6 +87,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         
     }
     override func viewWillAppear(_ animated: Bool) {
+
         checkIfProductIsLiked()
         //        let likeVC = LikeViewController()
         //        likeVC.likeView.collectionView.reloadData()
@@ -126,11 +127,22 @@ class WebViewController: UIViewController, WKUIDelegate {
     func checkIfProductIsLiked() {
         let repository = LikeTableRepository()
         let likedItems = repository.fetch()
+        
         if let productID = self.productID, likedItems.contains(where: { $0.productID == productID }) {
+            
+            isLiked = true
+        } else {
+            isLiked = false
+        }
+        
+        if let likeProductID = self.likeProductID,
+           likedItems.contains(where: { $0.productID == likeProductID }) {
             isLiked = true
         } else {
             isLiked = false
         }
     }
+    
+  
     
 }
