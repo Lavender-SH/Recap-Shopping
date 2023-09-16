@@ -89,25 +89,22 @@ class WebViewController: UIViewController, WKUIDelegate {
     override func viewWillAppear(_ animated: Bool) {
 
         checkIfProductIsLiked()
-        //        let likeVC = LikeViewController()
-        //        likeVC.likeView.collectionView.reloadData()
-        print(#function, "==7777==")
+        //print(#function, "==7777==")
     }
     //백버튼 뒤로 돌아가기
     @objc func backToMainView() {
         navigationController?.popViewController(animated: true)
-        //        viewWillAppear(true)
     }
     
     //MARK: - 좋아요 버튼 눌렀을때 정보를 저장하는 로직
     @objc func detailLikeButtonTapped() {
         isLiked.toggle()
-        if isLiked { print("=5=", isLiked)
+        if isLiked { //print("=5=", isLiked)
             guard let item = self.item else { return }
             let repository = LikeTableRepository()
             repository.saveItem(item)
             
-        } else { print("=6=", isLiked)
+        } else { //print("=6=", isLiked)
             let repository = LikeTableRepository()
             if let item = self.item {
                 repository.deleteItem(item)
@@ -128,13 +125,13 @@ class WebViewController: UIViewController, WKUIDelegate {
         let repository = LikeTableRepository()
         let likedItems = repository.fetch()
         
+        //메인화면에서 웹뷰로 넘어갈떄
         if let productID = self.productID, likedItems.contains(where: { $0.productID == productID }) {
-            
             isLiked = true
         } else {
             isLiked = false
         }
-        
+        //좋아요 화면에서 웹뷰로 넘어갈때
         if let likeProductID = self.likeProductID,
            likedItems.contains(where: { $0.productID == likeProductID }) {
             isLiked = true

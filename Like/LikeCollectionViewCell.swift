@@ -108,7 +108,7 @@ class LikeCollectionViewCell: BaseCollectionViewCell {
     var onItemDeleted: (() -> Void)?
 
     @objc func toggleLike() {
-        print(#function)
+        //print(#function)
         //print("==77==", isLiked)
         guard let item = self.item else { return }
         let repository = LikeTableRepository()

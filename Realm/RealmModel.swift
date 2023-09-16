@@ -10,7 +10,7 @@ import RealmSwift
 
 import RealmSwift
 
-class LikeTable: Object, TitleProtocol, DisplayableItem {
+class LikeTable: Object, TitleProtocol {
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted var title: String
     @Persisted var image: String

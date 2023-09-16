@@ -27,8 +27,6 @@ class LikeViewController: BaseViewController{
     var isSearchActive = false
    
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -45,8 +43,8 @@ class LikeViewController: BaseViewController{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-            likeView.collectionView.reloadData()
-        print("=789=", #function)
+        likeView.collectionView.reloadData()
+        //print("=789=", #function)
     }
     
     // MARK: - 네비게이션UI
@@ -79,10 +77,9 @@ extension LikeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         return likedItems.count
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LikeCollectionViewCell", for: indexPath) as! LikeCollectionViewCell
-            
+    
             let item: LikeTable
             if isSearchActive {
                 item = filteredLikedItems[indexPath.row]
@@ -98,6 +95,7 @@ extension LikeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
             return cell
         }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let likeItem = likedItems[indexPath.row]
         let webVC = WebViewController()
@@ -109,7 +107,6 @@ extension LikeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         
         navigationController?.pushViewController(webVC, animated: true)
     }
-    
     
 }
 

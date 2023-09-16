@@ -110,7 +110,7 @@ class MainCollectionViewCell: BaseCollectionViewCell {
     }
 
     @objc func toggleLike() {
-        print(#function)
+        //print(#function)
         isLiked.toggle()
         if isLiked {
             guard let item = self.item else { return }
@@ -153,6 +153,7 @@ class MainCollectionViewCell: BaseCollectionViewCell {
         if let imageURL = URL(string: item.image) {
             imageView.kf.setImage(with: imageURL)
         }
+        
         let existingItem = realm.objects(LikeTable.self).filter("title == %@", item.title).first
             isLiked = existingItem != nil
     }

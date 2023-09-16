@@ -26,6 +26,7 @@ class MainViewController: BaseViewController {
     //pagination 변수
     var isEnd = false
     var start = 1
+    //네트워킹 중복 차단 변수
     var isRequesting = false
     
     
@@ -53,7 +54,7 @@ class MainViewController: BaseViewController {
             guard let items = items else { return }
             self.shopItems.append(contentsOf: items)
             self.mainView.collectionView.reloadData()
-            print(#function)
+            //print(#function)
             //print(items)
         }
     }
